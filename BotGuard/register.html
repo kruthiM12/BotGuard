@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B O T G U A R D | Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-hover: #0284c7;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --bg-light: #ffffff;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background-color: var(--bg-light);
+            overflow: hidden;
+        }
+
+        .split-layout {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: #ffffff;
+            position: relative;
+        }
+
+        .right-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+        }
+
+        .right-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(var(--primary) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.05;
+        }
+
+        .brand-logo {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #0369a1;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        .right-panel h1 {
+            font-size: 4.5rem;
+            font-weight: 300;
+            letter-spacing: -2px;
+            color: var(--text-main);
+            line-height: 1.1;
+            max-width: 500px;
+            margin: 0;
+            z-index: 1;
+        }
+
+        .right-panel h1 span {
+            font-weight: 700;
+            background: linear-gradient(to right, #0284c7, #0ea5e9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 380px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-wrapper h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 8px 0;
+        }
+
+        .login-wrapper p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0 0 30px 0;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .input-group {
+            flex: 1;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background-color: #f8fafc;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .register-link a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .register-link a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 900px) {
+            .split-layout {
+                flex-direction: column-reverse;
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
+            }
+
+            .right-panel {
+                flex: none;
+                padding: 60px 20px;
+                text-align: center;
+            }
+
+            .right-panel h1 {
+                font-size: 3rem;
+            }
+
+            .brand-logo {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 30px;
+                display: block;
+                text-align: center;
+            }
+
+            body,
+            html {
+                overflow: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="split-layout">
+        <div class="left-panel">
+            <a href="landing.html" class="brand-logo">B O T G U A R D</a>
+
+            <div class="login-wrapper">
+                <h2>Create an Account</h2>
+                <p>Set up your secure Netbanking profile.</p>
+
+                <form id="register-form">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>First Name</label>
+                            <input type="text" id="reg-fname" value="Code" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Last Name</label>
+                            <input type="text" id="reg-lname" value="Ninjas" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="reg-email" value="codeninjas@pestrust.edu.in" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="reg-password" value="admin25" required>
+                    </div>
+
+                    <button type="submit" class="btn-login">Create Account</button>
+                </form>
+
+                <div class="register-link">
+                    Already have an account? <a href="login.html">Sign In</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h1>Secure your<br><span>financial future.</span></h1>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const fName = document.getElementById('reg-fname').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-password').value;
+
+            // Save the exact credentials the user typed into local storage
+            localStorage.setItem('botguard_user_email', email);
+            localStorage.setItem('botguard_user_pass', pass);
+
+            alert(`Account created successfully, ${fName}!\n\nYou can now log in using your Email Address and Password.`);
+
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+
+</html>

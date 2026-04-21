@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B O T G U A R D | Transactions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --bg-body: #f1f5f9;
+            --bg-surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --credit: #10b981;
+            /* Green */
+            --debit: #0f172a;
+            /* Dark */
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0369a1;
+            letter-spacing: 2px;
+            padding: 0 30px 30px 30px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            padding: 15px 30px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: #f0fdfa;
+            border-right: 4px solid var(--primary);
+        }
+
+        .nav-item:hover:not(.active) {
+            background: #f8fafc;
+            color: var(--text-main);
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--text-main);
+        }
+
+        .btn-analytics {
+            background: #0f172a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-analytics:hover {
+            background: #1e293b;
+        }
+
+        /* --- FILTER BAR --- */
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .filter-input,
+        .filter-select {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-input {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .filter-input:focus,
+        .filter-select:focus {
+            border-color: var(--primary);
+        }
+
+        /* --- TRANSACTIONS TABLE --- */
+        .table-card {
+            background: var(--bg-surface);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 16px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 20px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--text-main);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        /* Data formatting */
+        .tx-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .tx-ref {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .amount-credit {
+            color: var(--credit);
+            font-weight: 700;
+        }
+
+        .amount-debit {
+            color: var(--debit);
+            font-weight: 600;
+        }
+
+        /* Status Badges */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-completed {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">BOTGUARD</div>
+        <a href="index.html" class="nav-item">🏦 Dashboard</a>
+        <a href="transactions.html" class="nav-item active">📊 Transactions</a>
+        <a href="settings.html" class="nav-item">⚙️ Settings</a>
+        <a href="login.html" class="nav-item">➜🚪Logout</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1>Transaction History</h1>
+            <a href="analytics.html" class="btn-analytics">👁️ View Security Analytics</a>
+        </div>
+
+        <div class="filter-bar">
+            <input type="text" class="filter-input" placeholder="Search payees, reference IDs...">
+            <select class="filter-select">
+                <option>All Transactions</option>
+                <option>Money In (Credits)</option>
+                <option>Money Out (Debits)</option>
+            </select>
+            <select class="filter-select">
+                <option>Last 30 Days</option>
+                <option>Last 3 Months</option>
+                <option>2026</option>
+            </select>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tx-tbody">
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // Base Mock Database of Transactions
+        const baseTransactions = [
+            { date: "Apr 18, 2026", title: "Transfer to Tarun", ref: "TXN-98234-A1", category: "Peer Transfer", status: "Completed", amount: 500.00, type: "debit" },
+            { date: "Apr 16, 2026", title: "Amazon Web Services", ref: "AWS-7781-US", category: "Cloud Hosting", status: "Completed", amount: 1250.00, type: "debit" },
+            { date: "Apr 15, 2026", title: "Internship Stipend", ref: "PAY-99120-TECH", category: "Salary / Income", status: "Completed", amount: 15000.00, type: "credit" },
+            { date: "Apr 12, 2026", title: "Transfer to Abhi", ref: "TXN-88211-B2", category: "Peer Transfer", status: "Completed", amount: 850.00, type: "debit" },
+            { date: "Apr 10, 2026", title: "Transfer from TheKeviboy", ref: "TXN-55102-C3", category: "Peer Transfer", status: "Completed", amount: 2500.00, type: "credit" },
+            { date: "Apr 08, 2026", title: "Spotify Premium", ref: "SUB-SP-001", category: "Subscription", status: "Pending", amount: 119.00, type: "debit" }
+        ];
+
+        // Fetch new transactions from Local Storage (made on the index page)
+        const storedTransactions = JSON.parse(localStorage.getItem('botguardHistory')) || [];
+
+        // Merge them together (putting the newest real-time ones at the top)
+        const allTransactions = [...storedTransactions, ...baseTransactions];
+
+        // Format Currency Helper
+        function formatMoney(amount) {
+            return '₹ ' + amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Render Table
+        const tbody = document.getElementById('tx-tbody');
+
+        allTransactions.forEach(tx => {
+            const isCredit = tx.type === 'credit';
+            const amountClass = isCredit ? 'amount-credit' : 'amount-debit';
+            const amountSign = isCredit ? '+' : '-';
+            const statusClass = tx.status === 'Completed' ? 'badge-completed' : 'badge-pending';
+
+            const row = `
+                <tr>
+                    <td><div style="font-weight: 500;">${tx.date}</div></td>
+                    <td>
+                        <div class="tx-title">${tx.title}</div>
+                        <div class="tx-ref">Ref: ${tx.ref}</div>
+                    </td>
+                    <td>${tx.category}</td>
+                    <td><span class="badge ${statusClass}">${tx.status}</span></td>
+                    <td style="text-align: right;" class="${amountClass}">
+                        ${amountSign}${formatMoney(tx.amount)}
+                    </td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    </script>
+</body>
+
+</html>

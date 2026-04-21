@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B O T G U A R D | Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-hover: #0284c7;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --bg-light: #ffffff;
+            --danger: #ef4444;
+        }
+
+        body, html { margin: 0; padding: 0; font-family: 'Inter', sans-serif; height: 100vh; background-color: var(--bg-light); overflow: hidden; }
+        .split-layout { display: flex; height: 100vh; width: 100vw; }
+        .left-panel { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; background: #ffffff; position: relative; }
+        .right-panel { flex: 1; background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%); display: flex; justify-content: center; align-items: center; padding: 60px; position: relative; }
+        .right-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(var(--primary) 1px, transparent 1px); background-size: 30px 30px; opacity: 0.05; }
+        
+        .brand-logo { position: absolute; top: 40px; left: 50px; font-size: 1.25rem; font-weight: 800; letter-spacing: 3px; color: #0369a1; text-transform: uppercase; text-decoration: none; }
+        .right-panel h1 { font-size: 4.5rem; font-weight: 300; letter-spacing: -2px; color: var(--text-main); line-height: 1.1; max-width: 500px; margin: 0; z-index: 1; }
+        .right-panel h1 span { font-weight: 700; color: var(--primary); }
+
+        .login-wrapper { width: 100%; max-width: 380px; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .login-wrapper h2 { font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin: 0 0 8px 0; }
+        .login-wrapper p { color: var(--text-muted); font-size: 0.95rem; margin: 0 0 30px 0; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-group input { width: 100%; padding: 14px 16px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; font-family: 'Inter', sans-serif; color: var(--text-main); background-color: #f8fafc; box-sizing: border-box; transition: all 0.3s ease; }
+        .input-group input:focus { outline: none; border-color: var(--primary); background-color: white; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15); }
+        
+        .btn-login { width: 100%; padding: 16px; margin-top: 10px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.05rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); transition: all 0.2s ease; }
+        .btn-login:hover { transform: translateY(-2px); background: var(--primary-hover); }
+        .register-link { text-align: center; margin-top: 25px; font-size: 0.95rem; color: var(--text-muted); }
+        .register-link a { color: var(--primary); font-weight: 600; text-decoration: none; }
+        .register-link a:hover { text-decoration: underline; }
+
+        /* --- BOT ERROR OVERLAY --- */
+        .bot-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; animation: flashIn 0.2s ease-out; }
+        @keyframes flashIn { from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: scale(1); } }
+        .bot-alert-box { background: #1e293b; border: 2px solid var(--danger); padding: 40px 60px; border-radius: 16px; text-align: center; box-shadow: 0 20px 40px rgba(239, 68, 68, 0.2); }
+        .bot-alert-icon { font-size: 3rem; margin-bottom: 15px; }
+        .bot-alert-text { color: var(--danger); font-size: 1.5rem; font-weight: 700; margin: 0 0 10px 0; letter-spacing: 0.5px; }
+        .bot-alert-sub { color: #94a3b8; font-size: 1rem; margin: 0; }
+
+        /* --- THE HONEYPOT CSS --- */
+        .honeypot-trap {
+            position: absolute; 
+            left: -9999px; 
+            top: -9999px; 
+            opacity: 0; 
+            z-index: -1;
+        }
+
+        @media (max-width: 900px) {
+            .split-layout { flex-direction: column-reverse; height: auto; min-height: 100vh; overflow-y: auto; }
+            .right-panel { flex: none; padding: 60px 20px; text-align: center; }
+            .right-panel h1 { font-size: 3rem; }
+            .brand-logo { position: relative; top: 0; left: 0; margin-bottom: 30px; display: block; text-align: center; }
+            body, html { overflow: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="split-layout">
+        <div class="left-panel">
+            <a href="landing.html" class="brand-logo">B O T G U A R D</a>
+            
+            <div class="login-wrapper">
+                <h2>Sign In</h2>
+                <p>Enter your details to access your secure dashboard.</p>
+                
+                <form id="login-form">
+                    <div class="input-group">
+                        <label>Customer ID / Email</label>
+                        <input type="text" id="cust-id" placeholder="e.g. 1234567891" required autocomplete="off">
+                    </div>
+
+                    <div class="input-group honeypot-trap" aria-hidden="true">
+                        <label>Phone Number (Do not fill this out)</label>
+                        <input type="text" id="trap-phone" tabindex="-1" autocomplete="off">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required autocomplete="off">
+                    </div>
+
+                    <button type="submit" class="btn-login">Login to Dashboard</button>
+                </form>
+
+                <div class="register-link">
+                    Don't have an account? <a href="register.html">Register Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h1>Welcome to<br><span>Netbanking.</span></h1>
+        </div>
+    </div>
+
+    <div class="bot-overlay" id="bot-overlay">
+        <div class="bot-alert-box">
+            <div class="bot-alert-icon">⚠️</div>
+            <h2 class="bot-alert-text" id="bot-reason-text">BOT Flagged.</h2>
+            <p class="bot-alert-sub">Terminating session and redirecting...</p>
+        </div>
+    </div>
+
+    <script>
+        let keystrokeTimes = [];
+        let isBotFlagged = false;
+
+        // Logging Function
+        function logAuthAttempt(isBot, reason = "") {
+            let history = JSON.parse(localStorage.getItem('botguardLoginHistory')) || [];
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            let riskLabel = isBot ? "High Risk" : "Normal Risk";
+            if (reason) riskLabel += " - " + reason;
+
+            history.unshift({
+                date: dateStr,
+                time: timeStr,
+                entity: isBot ? "Bot Automation Detected" : "Human Verified",
+                risk: riskLabel
+            });
+
+            if (history.length > 15) history.pop();
+            localStorage.setItem('botguardLoginHistory', JSON.stringify(history));
+        }
+
+        function triggerBotTrap(reasonMsg) {
+            if (isBotFlagged) return; 
+            isBotFlagged = true;
+            
+            // Log the specific bot attack
+            logAuthAttempt(true, reasonMsg);
+            
+            // Update the UI text so the judges know exactly what caught the bot
+            document.getElementById('bot-reason-text').innerText = `BOT Caught: ${reasonMsg}`;
+            
+            const overlay = document.getElementById('bot-overlay');
+            overlay.style.display = 'flex';
+            
+            setTimeout(() => { window.location.href = 'landing.html'; }, 3000);
+        }
+
+        const inputs = document.querySelectorAll('#cust-id, #password');
+
+        inputs.forEach(input => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key.length === 1) {
+                    const now = performance.now();
+                    keystrokeTimes.push(now);
+                    
+                    if (keystrokeTimes.length >= 5) {
+                        const lastIndex = keystrokeTimes.length - 1;
+                        const timeDifference = keystrokeTimes[lastIndex] - keystrokeTimes[lastIndex - 4];
+                        
+                        if (timeDifference < 200) { 
+                            triggerBotTrap("Abnormal Typing Speed"); 
+                        }
+                    }
+                }
+            });
+
+            input.addEventListener('paste', (e) => {
+                e.preventDefault(); 
+                triggerBotTrap("Credential Stuffing (Paste)");
+            });
+        });
+
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            
+            if (isBotFlagged) return; 
+
+            // --- THE HONEYPOT CHECK ---
+            const honeypotValue = document.getElementById('trap-phone').value;
+            if (honeypotValue.length > 0) {
+                // A bot found the hidden field and filled it out!
+                triggerBotTrap("DOM Honeypot Triggered");
+                return;
+            }
+
+            const passLength = document.getElementById('password').value.length;
+
+            if (passLength > 0 && keystrokeTimes.length === 0) {
+                triggerBotTrap("DOM Script Injection");
+                return;
+            }
+
+            const enteredId = document.getElementById('cust-id').value;
+            const enteredPass = document.getElementById('password').value;
+
+            const savedEmail = localStorage.getItem('botguard_user_email');
+            const savedPass = localStorage.getItem('botguard_user_pass');
+
+            const isHardcodedValid = (enteredId === '1234567891' && enteredPass === 'admin25');
+            const isSavedValid = (savedEmail && savedPass && enteredId === savedEmail && enteredPass === savedPass);
+
+            if (isHardcodedValid || isSavedValid) {
+                logAuthAttempt(false);
+                window.location.href = 'index.html';
+            } else {
+                alert('Invalid Customer ID or Password. Please try again.');
+                document.getElementById('password').value = '';
+                keystrokeTimes = []; 
+            }
+        });
+    </script>
+</body>
+</html>

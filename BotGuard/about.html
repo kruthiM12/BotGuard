@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B O T G U A R D | About Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- GLOBAL VARIABLES --- */
+        :root {
+            --primary: #0ea5e9;
+            --primary-hover: #0284c7;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --bg-light: #ffffff;
+            --bg-offset: #f8fafc;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-offset);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #0369a1;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-right: 30px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* --- MAIN HERO SECTION --- */
+        .about-hero {
+            padding: 100px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .about-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin: 0 0 20px 0;
+            color: var(--text-main);
+        }
+
+        .about-hero h1 span {
+            background: linear-gradient(to right, #0284c7, #0ea5e9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .about-hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* --- CONTENT SECTION --- */
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .text-block {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+        }
+
+        .text-block h2 {
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .text-block p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .highlight-quote {
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+            margin: 30px 0;
+            font-size: 1.25rem;
+            font-style: italic;
+            color: #0369a1;
+            background: #f0fdfa;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* --- THE ARCHITECTURE GRID --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin: 0 0 10px 0;
+            color: var(--primary);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="landing.html" class="logo">B O T G U A R D</a>
+        <div class="nav-links">
+            <a href="landing.html">Home</a>
+            <a href="login.html" class="btn-outline">Login to Dashboard</a>
+        </div>
+    </nav>
+
+    <section class="about-hero">
+        <h1>Banking built for the <span>Human Element.</span></h1>
+        <p>We are a next-generation financial institution that believes your security shouldn't rely solely on what you know, but on how you naturally interact.</p>
+    </section>
+
+    <section class="content-section">
+        
+        <div class="text-block">
+            <h2>The Threat in 2026</h2>
+            <p>Right now, if a scammer gets your password, the banking app thinks they are you. The digital landscape has evolved. In 2026, scammers use AI bots that act so much like humans that they can even bypass face scans or SMS codes.</p>
+            <p>Traditional banks are fighting a losing battle by continually adding more friction for the user—more passwords, more hardware tokens, more identity checks. We took a different approach.</p>
+            
+            <div class="highlight-quote">
+                "Current security checks WHO you are (Password/FaceID). Our solution checks WHAT you are (Human vs. Bot)."
+            </div>
+        </div>
+
+        <div class="text-block">
+            <h2>Our Proprietary Software Layer</h2>
+            <p>We built a software layer that looks for mathematical perfection to catch the thief. The core idea is simple: Humans are "messy" and "imperfect." AI is "perfect" and "mathematical"</p>
+            <p>By injecting invisible 'behavioral puzzles' into the app, we catch AI scammers who are 'too perfect' to be human, all without interrupting your banking experience.</p>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <h3>Spatial Dynamics</h3>
+                    <p>We subtly shift critical UI elements milliseconds before an interaction. Human hands naturally adjust to the invisible wiggle. Scripts and bots click the dead space.</p>
+                </div>
+                <div class="card">
+                    <h3>Hardware Telemetry</h3>
+                    <p>A real human holding a phone always has a tiny bit of "hand shake". We analyze device orientation variance. If your device is perfectly still, it's likely a server emulator.</p>
+                </div>
+                <div class="card">
+                    <h3>Temporal Verification</h3>
+                    <p>We measure reaction times to unexpected visual prompts. An AI identifies and clicks faster than human nerves can physically fire. Superhuman speed triggers our fraud defense.</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+</html>

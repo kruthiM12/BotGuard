@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B O T G U A R D | Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0ea5e9; --primary-dark: #0284c7; --bg-body: #f1f5f9; --bg-surface: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border: #e2e8f0; --danger: #ef4444; --success: #10b981; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { width: 260px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; }
+        .brand { font-size: 1.5rem; font-weight: 800; color: #0369a1; letter-spacing: 2px; padding: 0 30px 30px 30px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .nav-item { padding: 15px 30px; color: var(--text-muted); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
+        .nav-item.active { color: var(--primary); background: #f0fdfa; border-right: 4px solid var(--primary); }
+        .nav-item:hover:not(.active) { background: #f8fafc; color: var(--text-main); }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .header { margin-bottom: 30px; }
+        .header h1 { margin: 0 0 10px 0; font-size: 2rem; color: var(--text-main); }
+        .header p { margin: 0; color: var(--text-muted); }
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1200px; }
+        .card { background: var(--bg-surface); border-radius: 16px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--border); }
+        .card-title { font-size: 1.25rem; font-weight: 700; margin: 0 0 25px 0; padding-bottom: 15px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+        .input-group input, .input-group select { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; font-family: 'Inter', sans-serif; color: var(--text-main); box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary); }
+        .row { display: flex; gap: 15px; }
+        .row .input-group { flex: 1; }
+        .btn { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn:hover { background: var(--primary-dark); }
+        .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .btn-danger:hover { background: var(--danger); color: white; }
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); }
+        .toggle-row:last-child { border-bottom: none; }
+        .toggle-info h4 { margin: 0 0 5px 0; font-size: 1rem; color: var(--text-main); }
+        .toggle-info p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+        .switch { position: relative; display: inline-block; width: 48px; height: 26px; flex-shrink: 0; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(22px); }
+        @media (max-width: 1024px) { .settings-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">BOTGUARD</div>
+        <a href="index.html" class="nav-item">🏦 Dashboard</a>
+        <a href="transactions.html" class="nav-item">📊 Transactions</a>
+        <a href="settings.html" class="nav-item active">⚙️ Settings</a>
+        <a href="login.html" class="nav-item">➜🚪Logout</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1>Account Settings</h1>
+            <p>Manage your profile, security preferences, and behavioral algorithms.</p>
+        </div>
+
+        <div class="settings-grid">
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div class="card">
+                    <h2 class="card-title">👤 Personal Information</h2>
+                    <form onsubmit="event.preventDefault(); alert('Profile updated successfully!');">
+                        <div class="row">
+                            <div class="input-group"><label>First Name</label><input type="text" value="Code"></div>
+                            <div class="input-group"><label>Last Name</label><input type="text" value="Ninjas"></div>
+                        </div>
+                        <div class="input-group"><label>Email Address</label><input type="email" value="codeninjas@pestrust.edu.in"></div>
+                        <div class="input-group"><label>Phone Number</label><input type="tel" value="+91 9876543210"></div>
+                        <button type="submit" class="btn">Save Changes</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">📱 App Preferences</h2>
+                    <div class="input-group">
+                        <label>Base Currency</label>
+                        <select><option>INR - Indian Rupee (₹)</option><option>USD - US Dollar ($)</option></select>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div class="card" style="border: 1px solid var(--primary); box-shadow: 0 10px 25px rgba(14, 165, 233, 0.1);">
+                    <h2 class="card-title" style="color: var(--primary);">🛡️ BOTGUARD Configuration</h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px;">Configure the active behavioral honey-traps monitoring your account.</p>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Cursor Trajectory Analysis</h4>
+                            <p>Tracks mouse path linearity to catch hardcoded script dragging.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="trap-cursor" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Spatial Dynamics (Invisible Wiggle)</h4>
+                            <p>Shifts UI elements slightly to detect rigid coordinate scripts.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="trap-spatial" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Hardware Telemetry</h4>
+                            <p>Monitors gyroscope variance to ensure human device handling.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="trap-hardware" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Temporal Reaction Speedbump</h4>
+                            <p>Deploys visual cues to flag sub-50ms superhuman response times.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="trap-temporal" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #f0fdfa; border-radius: 8px; border-left: 4px solid var(--success);">
+                        <p id="status-text" style="margin: 0; font-size: 0.85rem; color: #065f46; font-weight: 500;">Status: System is actively monitoring.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">⚠️ Danger Zone</h2>
+                    <div style="display: flex; gap: 15px;">
+                        <button class="btn btn-danger" onclick="alert('Action blocked.')">Deactivate Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load settings including the new cursor parameter (removed typing)
+        const defaultSettings = { spatial: true, hardware: true, temporal: true, cursor: true };
+        let engineSettings = JSON.parse(localStorage.getItem('botguardConfig')) || defaultSettings;
+
+        document.getElementById('trap-cursor').checked = engineSettings.cursor;
+        document.getElementById('trap-spatial').checked = engineSettings.spatial;
+        document.getElementById('trap-hardware').checked = engineSettings.hardware;
+        document.getElementById('trap-temporal').checked = engineSettings.temporal;
+
+        function updateSettings() {
+            engineSettings = {
+                cursor: document.getElementById('trap-cursor').checked,
+                spatial: document.getElementById('trap-spatial').checked,
+                hardware: document.getElementById('trap-hardware').checked,
+                temporal: document.getElementById('trap-temporal').checked
+            };
+            localStorage.setItem('botguardConfig', JSON.stringify(engineSettings));
+            
+            const statusText = document.getElementById('status-text');
+            statusText.innerText = "Status: Configuration updated successfully.";
+            setTimeout(() => statusText.innerText = "Status: System is actively monitoring.", 2000);
+        }
+
+        document.getElementById('trap-cursor').addEventListener('change', updateSettings);
+        document.getElementById('trap-spatial').addEventListener('change', updateSettings);
+        document.getElementById('trap-hardware').addEventListener('change', updateSettings);
+        document.getElementById('trap-temporal').addEventListener('change', updateSettings);
+    </script>
+</body>
+</html>

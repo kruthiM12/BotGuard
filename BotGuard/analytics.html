@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B O T G U A R D | Security Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a; --card-dark: #1e293b; --accent: #38bdf8; 
+            --success: #10b981; --danger: #ef4444; --text-light: #f8fafc; 
+            --text-muted: #94a3b8; --disabled: #64748b;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-light); padding: 40px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #334155; }
+        .header h1 { margin: 0; font-size: 2rem; color: var(--text-light); display: flex; align-items: center; gap: 15px; }
+        
+        .status-dot { width: 12px; height: 12px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
+        .status-dot.off { background-color: var(--disabled); box-shadow: none; animation: none; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        
+        .btn-back { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.2s; }
+        .btn-back:hover { background: rgba(56, 189, 248, 0.1); }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .data-card { background: var(--card-dark); border-radius: 16px; padding: 25px; border: 1px solid #334155; }
+        .card-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin: 0 0 15px 0; }
+        .data-value { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--accent); margin: 0; }
+        .data-value.disabled { color: var(--disabled); }
+        .data-subtext { font-size: 0.85rem; color: var(--text-muted); margin-top: 10px; line-height: 1.4; }
+        
+        .full-width-card { grid-column: 1 / -1; background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); }
+        .verdict { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .human { color: var(--success); } .bot { color: var(--danger); } .system-off { color: var(--disabled); }
+
+        /* AUTH LOG TABLE STYLES */
+        .auth-table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 10px; }
+        .auth-table th { padding: 15px 10px; color: var(--text-muted); font-size: 0.85rem; border-bottom: 1px solid #334155; text-transform: uppercase; letter-spacing: 1px; }
+        .auth-table td { padding: 18px 10px; border-bottom: 1px solid #1e293b; color: var(--text-light); font-size: 0.95rem; }
+        .auth-table tr:last-child td { border-bottom: none; }
+        .risk-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; display: inline-block; }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>
+            <div class="status-dot" id="main-status-dot"></div> Live Telemetry Feed
+        </h1>
+        <a href="index.html" class="btn-back">← Back to Dashboard</a>
+    </div>
+
+    <div class="grid">
+        <div class="data-card">
+            <h2 class="card-title">Cursor Trajectory</h2>
+            <p class="data-value" id="val-cursor">--</p>
+            <p class="data-subtext">Path linearity rating. Bot automation moves in 100% straight lines.</p>
+        </div>
+        <div class="data-card">
+            <h2 class="card-title">Temporal Reaction</h2>
+            <p class="data-value" id="val-time">--</p>
+            <p class="data-subtext">Time taken to process visual cue. Superhuman speed is < 50ms.</p>
+        </div>
+        <div class="data-card">
+            <h2 class="card-title">Hardware Gyroscope</h2>
+            <p class="data-value" id="val-gyro">--</p>
+            <p class="data-subtext">Measurement of natural human hand-shake / device tilt.</p>
+        </div>
+        <div class="data-card">
+            <h2 class="card-title">Click Coordinates</h2>
+            <p class="data-value" style="font-size: 1.5rem; margin-top: 10px;" id="val-coords">X: -- / Y: --</p>
+            <p class="data-subtext">Button shifted exactly 20px prior to interaction.</p>
+        </div>
+
+        <div class="data-card full-width-card">
+            <h2 class="card-title">BOTGUARD Engine Verdict</h2>
+            <div class="verdict" id="verdict-display">Awaiting Data...</div>
+        </div>
+    </div>
+
+    <div class="data-card full-width-card" style="margin-top: 25px;">
+        <h2 class="card-title">Authentication History Log</h2>
+        <table class="auth-table">
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Authentication Outcome</th>
+                    <th>Risk Level</th>
+                </tr>
+            </thead>
+            <tbody id="auth-history-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        // --- 1. ENGINE VERDICT LOGIC (Transfer Telemetry) ---
+        const rawData = localStorage.getItem('botguardTelemetry');
+        const rawConfig = localStorage.getItem('botguardConfig');
+        const config = rawConfig ? JSON.parse(rawConfig) : { spatial: true, hardware: true, temporal: true, cursor: true };
+
+        if (rawData) {
+            const telemetry = JSON.parse(rawData);
+
+            const timeDisplay = document.getElementById('val-time');
+            const gyroDisplay = document.getElementById('val-gyro');
+            const coordsDisplay = document.getElementById('val-coords');
+            const cursorDisplay = document.getElementById('val-cursor');
+
+            if (config.temporal) { timeDisplay.innerText = (telemetry.reactionTimeMs === 'Disabled' ? '0' : telemetry.reactionTimeMs) + 'ms'; } 
+            else { timeDisplay.innerText = '0ms'; timeDisplay.classList.add('disabled'); }
+
+            if (config.hardware) { gyroDisplay.innerText = (telemetry.gyroVariance === 'Disabled' ? '0.0000' : telemetry.gyroVariance); } 
+            else { gyroDisplay.innerText = '0.0000'; gyroDisplay.classList.add('disabled'); }
+
+            if (config.spatial) { coordsDisplay.innerText = `X: ${telemetry.clickX} / Y: ${telemetry.clickY}`; } 
+            else { coordsDisplay.innerText = `X: 0 / Y: 0`; coordsDisplay.classList.add('disabled'); }
+
+            if (config.cursor) { cursorDisplay.innerText = (telemetry.cursorLinearity === 'Disabled' ? '0.00%' : telemetry.cursorLinearity); } 
+            else { cursorDisplay.innerText = '0.00%'; cursorDisplay.classList.add('disabled'); }
+
+            const verdictDisplay = document.getElementById('verdict-display');
+            const statusDot = document.getElementById('main-status-dot');
+
+            if (!config.spatial && !config.hardware && !config.temporal && !config.cursor) {
+                verdictDisplay.innerHTML = '⚙️ Settings for Botguard are turned off';
+                verdictDisplay.className = 'verdict system-off';
+                statusDot.className = 'status-dot off';
+            } else {
+                let isBot = false;
+                let botTriggers = [];
+
+                if (config.temporal && telemetry.reactionTimeMs !== 'Disabled' && telemetry.reactionTimeMs < 50) {
+                    isBot = true; botTriggers.push("Superhuman Speed");
+                }
+                if (config.hardware && telemetry.gyroVariance === "0.0000" && config.temporal && telemetry.reactionTimeMs < 50) {
+                    botTriggers.push("Zero Hardware Variance");
+                }
+                if (config.cursor && telemetry.cursorLinearity !== 'Disabled' && parseFloat(telemetry.cursorLinearity) > 99.9) {
+                    isBot = true; botTriggers.push("Perfectly Linear Mouse Path");
+                }
+
+                if (isBot) {
+                    verdictDisplay.innerHTML = `⚠️ BOT DETECTED (${botTriggers.join(' + ')})`;
+                    verdictDisplay.className = 'verdict bot';
+                } else {
+                    if (config.hardware && telemetry.gyroVariance === "0.0000") {
+                        verdictDisplay.innerHTML = '✅ HUMAN VERIFIED (Desktop / Flat Surface Mode)';
+                    } else {
+                        verdictDisplay.innerHTML = '✅ HUMAN VERIFIED (Natural biological variance identified)';
+                    }
+                    verdictDisplay.className = 'verdict human';
+                }
+            }
+        }
+
+        // --- 2. RENDER AUTHENTICATION HISTORY ---
+        const authHistory = JSON.parse(localStorage.getItem('botguardLoginHistory')) || [];
+        const authBody = document.getElementById('auth-history-body');
+
+        if (authHistory.length === 0) {
+            authBody.innerHTML = '<tr><td colspan="3" style="padding: 20px 10px; color: var(--text-muted); text-align: center;">No authentication records found.</td></tr>';
+        } else {
+            authHistory.forEach(log => {
+                // We use .includes() so it perfectly matches strings like "High Risk - Rigid Spatial Script"
+                const isHighRisk = log.risk && log.risk.includes('High');
+                
+                // Solid Red background and White text for Bots. Green transparent for Humans.
+                const riskColor = isHighRisk ? '#ffffff' : 'var(--success)';
+                const bgBadge = isHighRisk ? 'var(--danger)' : 'rgba(16, 185, 129, 0.1)';
+                
+                const row = `
+                    <tr>
+                        <td>
+                            <div style="font-weight: 600;">${log.date}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">${log.time}</div>
+                        </td>
+                        <td style="font-weight: 600;">${log.entity}</td>
+                        <td>
+                            <span class="risk-badge" style="background: ${bgBadge}; color: ${riskColor};">
+                                ${log.risk}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+                authBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+    </script>
+</body>
+
+</html>

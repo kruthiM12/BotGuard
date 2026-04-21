@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B O T G U A R D | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0ea5e9; --primary-dark: #0284c7; --bg-body: #f1f5f9; --bg-surface: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border: #e2e8f0; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { width: 260px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 0; }
+        .brand { font-size: 1.5rem; font-weight: 800; color: #0369a1; letter-spacing: 2px; padding: 0 30px 30px 30px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .nav-item { padding: 15px 30px; color: var(--text-muted); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
+        .nav-item.active { color: var(--primary); background: #f0fdfa; border-right: 4px solid var(--primary); }
+        .nav-item:hover:not(.active) { background: #f8fafc; color: var(--text-main); }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .header h1 { margin: 0; font-size: 2rem; color: var(--text-main); }
+        .btn-analytics { background: #0f172a; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
+        .btn-analytics:hover { background: #1e293b; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
+        .card { background: var(--bg-surface); border-radius: 16px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--border); }
+        .balance-card { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); color: white; border: none; }
+        .balance-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .balance-label { font-size: 0.9rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+        .balance-toggle { cursor: pointer; background: rgba(255, 255, 255, 0.2); border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; color: white; font-size: 1rem;}
+        .balance-toggle:hover { background: rgba(255, 255, 255, 0.3); }
+        .balance-amount { font-size: 3rem; font-weight: 700; margin: 0; letter-spacing: -1px; transition: all 0.3s ease; }
+        .transaction-list { display: flex; flex-direction: column; gap: 15px; }
+        .transaction-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid var(--border); animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .tx-name { font-weight: 600; color: var(--text-main); margin-bottom: 4px; }
+        .tx-details { font-size: 0.8rem; color: var(--text-muted); }
+        .tx-amount { font-weight: 700; color: #ef4444; }
+        .card-title { font-size: 1.25rem; font-weight: 700; margin: 0 0 25px 0; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+        .input-group input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 10px; font-size: 1.05rem; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .input-group input:focus { border-color: var(--primary); }
+        .transfer-btn { width: 100%; padding: 16px; margin-top: 10px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: all 0.05s linear; position: relative; z-index: 2; }
+        .transfer-btn:hover { background: var(--primary-dark); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; }
+        .modal-content h2 { margin: 0 0 10px 0; }
+        .modal-content p { color: var(--text-muted); margin-bottom: 30px; }
+        .target-icon { font-size: 4rem; background: #f8fafc; border: 3px solid var(--primary); padding: 20px; border-radius: 50%; cursor: pointer; display: inline-block; user-select: none; }
+        .target-icon:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">BOTGUARD</div>
+        <a href="#" class="nav-item active">🏦 Dashboard</a>
+        <a href="transactions.html" class="nav-item">📊 Transactions</a>
+        <a href="settings.html" class="nav-item">⚙️ Settings</a>
+        <a href="login.html" class="nav-item">➜🚪Logout</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1>Welcome back, Code Ninjas</h1>
+            <a href="analytics.html" class="btn-analytics">👁️ View Security Analytics</a>
+        </div>
+
+        <div class="dashboard-grid">
+            
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div class="card balance-card">
+                    <div class="balance-header">
+                        <div class="balance-label">Total Available Balance</div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <button class="balance-toggle" id="reset-demo-btn" title="Reset Demo Balance">↻</button>
+                            <button class="balance-toggle" id="toggle-balance" title="Show/Hide Balance">👁️</button>
+                        </div>
+                    </div>
+                    <div class="balance-amount" id="balance-display">₹ * * * *</div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Recent Activity</h3>
+                    <div id="transaction-list" class="transaction-list">
+                        <p id="no-tx-msg" style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">No recent transactions.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Quick Transfer</h2>
+                
+                <div class="input-group">
+                    <label>Account Number</label>
+                    <input type="text" id="tx-account" placeholder="Enter recipient account number">
+                </div>
+
+                <div class="input-group">
+                    <label>IFSC Code</label>
+                    <input type="text" id="tx-ifsc" placeholder="e.g. SBIN0001234">
+                </div>
+
+                <div class="input-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="tx-name" placeholder="Enter recipient full name">
+                </div>
+                
+                <div class="input-group">
+                    <label>Transfer Amount (INR)</label>
+                    <input type="number" id="tx-amount" placeholder="Enter amount">
+                </div>
+
+                <div style="position: relative; margin-top: 10px;">
+                    <div id="bot-trap-area" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; border-radius: 10px; cursor: pointer; background: transparent;"></div>
+                    
+                    <button class="transfer-btn" id="transfer-btn" style="margin-top: 0; position: relative; z-index: 2;">Confirm Transfer</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="security-modal">
+        <div class="modal-content">
+            <h2>Security Verification</h2>
+            <p>Please tap the icon below to verify you are human and authorize this transfer.</p>
+            <div class="target-icon" id="target-icon">🐶</div>
+        </div>
+    </div>
+
+    <script>
+        // --- CENTRAL LOGGING FUNCTION FOR TRAP KICKOUTS ---
+        function logAuthAttempt(isBot, reason = "") {
+            let history = JSON.parse(localStorage.getItem('botguardLoginHistory')) || [];
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            let riskLabel = isBot ? "High Risk" : "Normal Risk";
+            if (reason) riskLabel += " - " + reason;
+
+            history.unshift({
+                date: dateStr,
+                time: timeStr,
+                entity: isBot ? "Bot Automation Detected" : "Human Verified",
+                risk: riskLabel
+            });
+
+            // Keep only the 15 most recent logs
+            if (history.length > 15) history.pop();
+            localStorage.setItem('botguardLoginHistory', JSON.stringify(history));
+        }
+
+        // --- LOAD ENGINE CONFIGURATION ---
+        const defaultSettings = { spatial: true, hardware: true, temporal: true, cursor: true };
+        const engineSettings = JSON.parse(localStorage.getItem('botguardConfig')) || defaultSettings;
+
+        // --- DYNAMIC BALANCE STATE ---
+        let currentBalance = parseFloat(localStorage.getItem('botguardBalance'));
+        if (isNaN(currentBalance)) currentBalance = 100000.00; 
+
+        let isBalanceHidden = true;
+        const balanceDisplay = document.getElementById('balance-display');
+        const toggleBtn = document.getElementById('toggle-balance');
+        const resetDemoBtn = document.getElementById('reset-demo-btn');
+
+        function formatMoney(amount) {
+            return '₹ ' + amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            isBalanceHidden = !isBalanceHidden;
+            if (isBalanceHidden) { balanceDisplay.innerText = '₹ * * * *'; toggleBtn.innerText = '👁️'; } 
+            else { balanceDisplay.innerText = formatMoney(currentBalance); toggleBtn.innerText = '🙈'; }
+        });
+
+        resetDemoBtn.addEventListener('click', () => {
+            currentBalance = 100000.00;
+            localStorage.setItem('botguardBalance', currentBalance);
+            localStorage.removeItem('botguardHistory'); 
+            
+            if (!isBalanceHidden) {
+                balanceDisplay.innerText = formatMoney(currentBalance);
+            }
+            
+            document.getElementById('transaction-list').innerHTML = '<p id="no-tx-msg" style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">No recent transactions.</p>';
+            alert("Demo Reset Successful!\n\nBalance restored to ₹ 100,000.00 and transaction history cleared.");
+        });
+
+        // Load existing transactions on page load
+        function loadRecentActivity() {
+            const txHistory = JSON.parse(localStorage.getItem('botguardHistory')) || [];
+            const txList = document.getElementById('transaction-list');
+            if (txHistory.length > 0) {
+                document.getElementById('no-tx-msg').style.display = 'none';
+                txList.innerHTML = ''; 
+                txHistory.slice(0, 3).forEach(tx => {
+                    const maskedAccount = '******' + tx.ref.slice(-4);
+                    const formattedAmt = parseFloat(tx.amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    txList.insertAdjacentHTML('beforeend', `<div class="transaction-item"><div><div class="tx-name">${tx.title}</div><div class="tx-details">${tx.date}</div></div><div class="tx-amount">-₹ ${formattedAmt}</div></div>`);
+                });
+            }
+        }
+        loadRecentActivity();
+
+        // --- NEURO-SHIELD BEHAVIORAL TRAP LOGIC ---
+        const behavioralData = {
+            clickX: 0, clickY: 0, buttonShifted: false, gyroVariance: 'Disabled', reactionTimeMs: 'Disabled', cursorLinearity: 'Disabled'
+        };
+
+        const transferBtn = document.getElementById('transfer-btn');
+        const botTrapArea = document.getElementById('bot-trap-area');
+        const securityModal = document.getElementById('security-modal');
+        const targetIcon = document.getElementById('target-icon');
+        
+        let hasWiggled = false;
+        let appearanceTime = 0;
+        let gyroReadings = [];
+        let mousePath = [];
+
+        // TRAP 1: The Wiggle
+        transferBtn.addEventListener('mouseenter', () => {
+            if (engineSettings.spatial && !hasWiggled) {
+                transferBtn.style.transform = 'translateX(-20px)';
+                hasWiggled = true;
+                behavioralData.buttonShifted = true;
+            }
+        });
+
+        // TRAP 1.5: The Honeypot Trigger (Active Killswitch)
+        botTrapArea.addEventListener('click', () => {
+            if (engineSettings.spatial && hasWiggled) {
+                // --> FIX: LOG THE BOT DETECTION BEFORE KICKING THEM OUT! <--
+                logAuthAttempt(true, "Rigid Spatial Script");
+                
+                alert("⚠️ NEURO-SHIELD ALERT: BOT DETECTED!\n\nRigid coordinate script identified. You clicked the exact old pixel where the button used to be.\n\nTerminating session and redirecting...");
+                window.location.href = 'login.html';
+            }
+        });
+
+        // TRAP 2: Gyroscope
+        window.addEventListener('deviceorientation', (e) => {
+            if (engineSettings.hardware && e.alpha !== null) {
+                const movement = Math.abs(e.alpha) + Math.abs(e.beta) + Math.abs(e.gamma);
+                gyroReadings.push(movement);
+                if (gyroReadings.length > 50) gyroReadings.shift();
+                
+                if (gyroReadings.length >= 2) {
+                    const mean = gyroReadings.reduce((a, b) => a + b) / gyroReadings.length;
+                    const variance = gyroReadings.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / gyroReadings.length;
+                    behavioralData.gyroVariance = variance.toFixed(4);
+                } else { behavioralData.gyroVariance = '0.0000'; }
+            }
+        });
+
+        // TRAP 4: Cursor Trajectory (Drunk Cursor Test)
+        window.addEventListener('mousemove', (e) => {
+            if (engineSettings.cursor && mousePath.length < 500) { 
+                mousePath.push({x: e.clientX, y: e.clientY});
+            }
+        });
+
+        // Form Submission Click
+        transferBtn.addEventListener('click', (e) => {
+            const amountStr = document.getElementById('tx-amount').value;
+            const name = document.getElementById('tx-name').value;
+            const requestedAmount = parseFloat(amountStr);
+
+            if(!amountStr || !name) { alert("Please fill in the transfer details first."); return; }
+            if (requestedAmount <= 0) { alert("Please enter a valid transfer amount."); return; }
+            if (requestedAmount > currentBalance) { alert("Transaction Failed: Insufficient funds."); return; }
+
+            behavioralData.clickX = e.clientX;
+            behavioralData.clickY = e.clientY;
+
+            // Calculate Cursor Linearity
+            if (engineSettings.cursor) {
+                if (mousePath.length > 1) {
+                    let actualDist = 0;
+                    let start = mousePath[0];
+                    let end = mousePath[mousePath.length - 1];
+                    let straightDist = Math.hypot(end.x - start.x, end.y - start.y);
+
+                    for (let i = 1; i < mousePath.length; i++) {
+                        actualDist += Math.hypot(mousePath[i].x - mousePath[i - 1].x, mousePath[i].y - mousePath[i - 1].y);
+                    }
+
+                    // Linearity %: 100% means perfectly straight
+                    let linearity = actualDist > 0 ? (straightDist / actualDist) * 100 : 100;
+                    if (linearity > 100) linearity = 100; // Cap
+                    behavioralData.cursorLinearity = linearity.toFixed(2) + "%";
+                } else {
+                    behavioralData.cursorLinearity = "100.00%"; // Teleported / No tracking
+                }
+            }
+
+            // TRAP 3: Check Temporal Setting
+            if (engineSettings.temporal) {
+                securityModal.style.display = 'flex';
+                appearanceTime = Date.now();
+            } else {
+                behavioralData.reactionTimeMs = 'Disabled';
+                processTransaction();
+            }
+        });
+
+        // TRAP 3 Completion Click
+        targetIcon.addEventListener('click', () => {
+            behavioralData.reactionTimeMs = Date.now() - appearanceTime;
+            securityModal.style.display = 'none';
+            processTransaction();
+        });
+
+        // Centralized Transaction Processing Function
+        function processTransaction() {
+            localStorage.setItem('botguardTelemetry', JSON.stringify(behavioralData));
+            
+            const transferAmount = parseFloat(document.getElementById('tx-amount').value);
+            currentBalance -= transferAmount;
+            localStorage.setItem('botguardBalance', currentBalance); 
+            if (!isBalanceHidden) balanceDisplay.innerText = formatMoney(currentBalance);
+            
+            const name = document.getElementById('tx-name').value;
+            const accountRaw = document.getElementById('tx-account').value || "0000";
+            const maskedAccount = '******' + accountRaw.slice(-4);
+            const formattedAmount = transferAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const timeString = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const dateString = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            const newTransaction = {
+                date: dateString, title: `Transfer to ${name}`, ref: `TXN-${Math.floor(Math.random() * 90000) + 10000}-RT`, category: "Peer Transfer", status: "Completed", amount: transferAmount, type: "debit"
+            };
+
+            let txHistory = JSON.parse(localStorage.getItem('botguardHistory')) || [];
+            txHistory.unshift(newTransaction); 
+            localStorage.setItem('botguardHistory', JSON.stringify(txHistory));
+
+            const noMsg = document.getElementById('no-tx-msg');
+            if (noMsg) noMsg.style.display = 'none';
+
+            const txList = document.getElementById('transaction-list');
+            const newTxHTML = `<div class="transaction-item"><div><div class="tx-name">${newTransaction.title}</div><div class="tx-details">Account: ${maskedAccount} • ${dateString} at ${timeString}</div></div><div class="tx-amount">-₹ ${formattedAmount}</div></div>`;
+            txList.insertAdjacentHTML('afterbegin', newTxHTML);
+
+            // Clean up states for next transfer
+            document.querySelectorAll('#tx-account, #tx-ifsc, #tx-name, #tx-amount').forEach(el => el.value = '');
+            transferBtn.style.transform = 'translateX(0px)';
+            hasWiggled = false;
+            mousePath = [];
+
+            alert("Transfer Processed! It will now appear on your Transactions page.");
+        }
+    </script>
+</body>
+</html>
